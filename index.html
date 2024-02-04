@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Commenting_system</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="./reset.css" rel="stylesheet">    
+  <link href="./style.css" rel="stylesheet">
+</head>
+
+<body>
+  <header></header>
+  <main>
+    <div class="wrapper">
+      <aside></aside>
+      <article>
+        <div class="news_column"></div>
+        <div class="news_bottom"></div>
+        <div class="news_bottom_line"></div>
+        <div class="comment_header">
+          <div class="comment_header_counter">
+            <div class="comment_header_counterText">Комментарии</div>
+            <div class="comment_header_counterElement"></div>
+          </div>
+            <div class="comment_header_sorter">
+              <select class="comment_header_sorterMenu">
+                <option>По дате</option>
+                <option selected>По количеству оценок</option>
+                <option>По актуальности</option>
+                <option>По количеству ответов</option>
+              </select>
+              <div class="comment_header_arrow"></div>    
+              <!-- &#9650; &#9660; -->
+            </div>
+            <div class="comment_header_favorite">
+              <p>Избранное</p>
+              <img src="./SVG/HeartRingIcon.svg" alt="HeartRingIcon.svg">
+            </div>
+        </div>
+        <div class="comment_main">
+          <img class="comment_authorFoto" alt="mainAuthorFoto"></img>
+          <div class="comment_main_header">
+            <div class="author_name"></div>
+            <div class="text_size">Макс. 1000 символов</div>
+          </div>
+          <textarea class="comment_inputField" type="text" maxLength = 100 placeholder="Введите текст сообщения..." autocorrect="on" rows="1"></textarea>
+          <button class="comment_inputButton">Отправить</button>
+        </div>
+        <div class="comment">
+          <!-- <img class="comment_authorFoto" alt="AuthorFoto"></img> -->
+          <!-- <div class="comment_textHead">
+            <div class="author_name">имя автора</div>
+            <div class="comment_textHead_date">01.06 19:71</div>
+          </div> -->
+          <!-- <p class="comment_textContent">
+            текст комментария   текст комментария   текст комментария   текст комментария   текст комментария   текст комментария   текст комментария   текст комментария   
+            текст комментария   текст комментария   текст комментария   текст комментария   текст комментария   текст комментария   текст комментария   текст комментария   
+            текст комментария   текст комментария   текст комментария   текст комментария   текст комментария   текст комментария   текст комментария   текст комментария   
+          </p> -->
+          <!-- <div class="comment_bottom">
+            <div class="comment_bottom_answerButton">
+              <img src="./SVG/BackArrow.svg" alt="BackArrow.svg">
+              <p>Ответить</p>
+            </div>
+            <div class="comment_bottom_favorite">
+              <img src="./SVG/HeartEmptyIcon.svg" alt="HeartEmptyIcon.svg">
+              <p>В Избранное</p>
+            </div>
+            <div class="comment_bottom_reiting">
+              <div class="comment_bottom_reitingNegative">-</div>
+              <div class="comment_bottom_reitingValue">88</div>
+              <div class="comment_bottom_reitingPositive">+</div>
+            </div>
+          </div> -->
+        </div>
+        <!-- <div class="comment_answer">
+          <img class="comment_authorFoto comment_authorAnswerFoto" alt="AuthorAnswerFoto"></img>
+            <div class="comment_answer_textHead comment_textHead">
+              <div class="comment_answer_author author_name">имя автора ответа</div>
+              <div class="comment_answer_commentAuthor_wrapper">
+                <img src="./SVG/BackArrow.svg" alt="BackArrow.svg">
+                <div class="comment_answer_commentAuthor">имя автора</div>
+              </div>
+              <div class="comment_textHead_date">30.03 19:67</div>
+            </div>
+            <p class="comment_textContent">
+              текст ответа текст ответа текст ответа текст ответа текст ответа текст ответа текст ответа текст ответа текст ответа текст ответа текст ответа 
+              текст ответа текст ответа текст ответа текст ответа текст ответа текст ответа текст ответа текст ответа текст ответа текст ответа текст ответа текст ответ
+              текст ответа текст ответа текст ответа текст ответа текст ответа текст ответа 
+            </p>
+            <div class="comment_answer_bottom comment_bottom">
+              <div class="comment_bottom_favorite">
+                <img src="./SVG/HeartEmptyIcon.svg" alt="HeartEmptyIcon.svg">
+                <p>В Избранное</p>
+              </div>
+              <div class="comment_bottom_reiting">
+                <div class="comment_bottom_reitingNegative">-</div>
+                <div class="comment_bottom_reitingValue">99</div>
+                <div class="comment_bottom_reitingPositive">+</div>
+              </div>
+            </div>
+        </div> -->
+      </article>
+    </div>
+    
+    <script src="./index.js"></script>
+  </main>
+</body>
+
+</html>
