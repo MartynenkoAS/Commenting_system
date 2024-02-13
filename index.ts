@@ -4,6 +4,7 @@
 interface commObject {
     author_avatar: string,
     author_name: string,
+    headAuthor_name: string,
     date_time: string,
     text: string,
     isFavorite: boolean,
@@ -40,10 +41,6 @@ select.addEventListener("change", () => {
 
 function mainObjSortFunc(prop: any, arrTogl: boolean, favTogl: boolean, obj: MainComment[]) {
         
-    if (favTogl) {
-        obj = obj.filter((favorite) => favorite.isFavorite == true || "answers" in favorite);
-       }
-
     return obj.sort((a,b) => {
 
         switch (prop) {                             // вот тут долго пытался сократить запись, но все время не получалось(( оставил криво, но работает!))
@@ -96,12 +93,12 @@ class Drow {
                     let CommElem_head_name: HTMLElement = document.createElement("div");
                         CommElem_head_name.classList.add("author_name");
                         CommElem_head_name.textContent = SortCommObj[i].author_name;
+                        
                         CommElem_head.appendChild(CommElem_head_name);
-    
+
                     let CommElem_head_date: HTMLElement = document.createElement("div");
                         CommElem_head_date.classList.add("comment_textHead_date");
                         CommElem_head_date.textContent = SortCommObj[i].date_time;
-
 
                         CommElem_head.appendChild(CommElem_head_date);
                     
@@ -130,8 +127,8 @@ class Drow {
                         let CommElem_bottom_answButTxt: HTMLElement = document.createElement("div");
                             CommElem_bottom_answButTxt.textContent = "Ответить";
                             CommElem_bottom_answBut.appendChild(CommElem_bottom_answButTxt);
-    
-                CommElem_bottom.appendChild(CommElem_bottom_answBut);
+
+                        CommElem_bottom.appendChild(CommElem_bottom_answBut);
     
                     let CommElem_bottom_favBut: HTMLElement = document.createElement("div");
                         CommElem_bottom_favBut.classList.add("comment_bottom_favorite");
@@ -233,10 +230,18 @@ class Drow {
                             });
                         
                 CommElem_bottom.appendChild(CommElem_bottom_rtnBut);
+                CommElement.appendChild(CommElem_bottom);
     
-            CommElement.appendChild(CommElem_bottom);
-            this.commentPosition?.insertBefore(CommElement, this.commentPosition.firstChild);
-            this.commentPosition?.scrollIntoView();
+            if (!favoriteToggle) {                                                      // не показываем часть массива, если включены фавориты
+                this.commentPosition?.insertBefore(CommElement, this.commentPosition.firstChild);
+            } else if (SortCommObj[i].isFavorite) {
+                this.commentPosition?.insertBefore(CommElement, this.commentPosition.firstChild);
+                } else {
+                    CommElement.innerHTML = "";
+                    CommElement.classList.remove("comment_block");
+                    this.commentPosition?.insertBefore(CommElement, this.commentPosition.firstChild);
+                }
+                this.commentPosition?.scrollIntoView();
           
             if (this.countElementPosition) {
                 this.countElementPosition.textContent = `(${SortCommObj.length})`;
@@ -278,7 +283,7 @@ class Drow {
 
                                         let CommElem_head_AuthName: HTMLElement = document.createElement("div");
                                             CommElem_head_AuthName.classList.add("comment_answer_commentAuthor");
-                                            CommElem_head_AuthName.textContent = SortCommObj[i].author_name as string;
+                                            CommElem_head_AuthName.textContent = AnsReit?.headAuthor_name as string;
                                             CommElem_head_wrap.appendChild(CommElem_head_AuthName);
                                 
                                     CommElem_head.appendChild(CommElem_head_wrap);
@@ -342,7 +347,7 @@ class Drow {
                                         CommElem_bottom_favButTxtPosit.textContent = "В избранном";
                                         localStorage.setItem("comments", JSON.stringify(SortCommObj));
                                     }
-                                }, { once: true });
+                                });
     
                                 let CommElem_bottom_rtnBut: HTMLElement = document.createElement("div");
                                     CommElem_bottom_rtnBut.classList.add("comment_bottom_reiting");
@@ -410,13 +415,15 @@ class Drow {
                         CommElement.appendChild(CommElem_bottom);
 
                         let answerPosition: HTMLTextAreaElement | null = document.querySelector('[Data-index="'+ i +'"]');
-                        answerPosition?.after(CommElement);
+
+                        if (!favoriteToggle) {              // не показываем часть массива, если включены фавориты
+                            answerPosition?.after(CommElement);
+                        } else if (AnsReit?.isFavorite) {
+                            answerPosition?.after(CommElement);
+                        }
                         answerPosition?.scrollIntoView();
                     }
-
                 }
-
-
             }
         }
     }
@@ -481,13 +488,13 @@ const inputButton: HTMLButtonElement | null = document.querySelector(".comment_i
 inputButton?.addEventListener("click", (event) => {                                             // обрабатываем нажатие кнопки ОТПРАВИТЬ
     if (inputFieldPosition?.value !== "") {
         if (inputFieldPosition) {
-            let inputComment: commObject = {author_avatar: "", author_name: "", date_time: "", text: "", isFavorite: false, rating: 0, 
+            let inputComment: commObject = {author_avatar: "", author_name: "", headAuthor_name: "", date_time: "", text: "", isFavorite: false, rating: 0, 
                                             ratingBorder: 0, valueOfRating: 0, valueOfAnswers: 0};
             if (usersGroup[0].avatar && usersGroup[0].firstName) {
                 let currDate: Date = new Date();
                 let currDateString: string = `${("0"+currDate.getDate()).slice(-2)}.${("0"+(currDate.getMonth()+1)).slice(-2)} ${("0"+currDate.getHours()).slice(-2)}:${("0"+currDate.getMinutes()).slice(-2)}`;
                 
-                inputComment = {author_avatar: usersGroup[0].avatar, author_name: usersGroup[0].firstName, 
+                inputComment = {author_avatar: usersGroup[0].avatar, author_name: usersGroup[0].firstName, headAuthor_name: "",
                                 date_time: currDateString, text: inputFieldPosition.value, isFavorite: false, 
                                 rating: 0, ratingBorder: 0, valueOfRating:0, valueOfAnswers: 0};
                 
@@ -500,7 +507,7 @@ inputButton?.addEventListener("click", (event) => {                             
             inputFieldPosition.value = "";
 
         }
-        drowClass.drowComment(JSON.parse(JSON.stringify(MainComments)));
+        drowClass.drowComment(mainObjSortFunc(select.value, arrowToggle, favoriteToggle, MainComments))
     }
 })
 
@@ -579,25 +586,24 @@ function saveAnswer(obj:MainComment[], index: number) {
 
         inputAnswerFieldButtonPosition?.addEventListener("click", (event) => {                                             // обрабатываем нажатие кнопки ОТПРАВИТЬ ОТВЕТ
             if (inputAnswerFieldElement.value !== "") {
-                let inputComment: commObject = {author_avatar: "", author_name: "", date_time: "", text: "", isFavorite: false, rating: 0, 
-                                            ratingBorder: 0, valueOfRating: 0, valueOfAnswers: 0};
+                let inputComment: commObject = {author_avatar: "", author_name: "", headAuthor_name: "", date_time: "", text: "", isFavorite: false, rating: 0, 
+                                                ratingBorder: 0, valueOfRating: 0, valueOfAnswers: 0};
                 if (usersGroup[0].avatar && usersGroup[0].firstName) {
                     let currDate: Date = new Date();
                     let currDateString: string = `${("0"+currDate.getDate()).slice(-2)}.${("0"+(currDate.getMonth()+1)).slice(-2)} ${("0"+currDate.getHours()).slice(-2)}:${("0"+currDate.getMinutes()).slice(-2)}`;
                     
-                    inputComment = {author_avatar: usersGroup[0].avatar, author_name: usersGroup[0].firstName, 
-                        date_time: currDateString, text: inputAnswerFieldElement.value, isFavorite: false, 
-                        rating: 0, ratingBorder: 0, valueOfRating: 0, valueOfAnswers: 0};
+                    inputComment = {author_avatar: usersGroup[0].avatar, author_name: usersGroup[0].firstName, headAuthor_name: MainComments[index].author_name, 
+                                    date_time: currDateString, text: inputAnswerFieldElement.value, isFavorite: false, 
+                                    rating: 0, ratingBorder: 0, valueOfRating: 0, valueOfAnswers: 0};
                     }
-                if (!obj[index].answers) {
-                    obj[index].answers = [];
+                if (!MainComments[index].answers) {
+                     MainComments[index].answers = [];
                 }
-                obj[index].answers?.push(inputComment);
-                obj[index].valueOfAnswers++;
-                console.log(obj[index].valueOfAnswers)
-                localStorage.setItem("comments", JSON.stringify(obj));
+                MainComments[index].answers?.push(inputComment);
+                MainComments[index].valueOfAnswers++;
+                localStorage.setItem("comments", JSON.stringify(MainComments));
                 
-                drowClass.drowComment(mainObjSortFunc(select.value, arrowToggle, favoriteToggle, obj))
+                drowClass.drowComment(mainObjSortFunc(select.value, arrowToggle, favoriteToggle, MainComments))
 
                 document.querySelector(".answer_comment")?.remove();
             }
@@ -643,7 +649,6 @@ commetnArrowPosition.addEventListener ("click", () => {
         commetnArrowPosition.textContent = "▼";
         arrowToggle = true;
     }
-    
     drowClass.drowComment(mainObjSortFunc(select.value, arrowToggle, favoriteToggle, MainComments))
 })
 
