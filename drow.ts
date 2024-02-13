@@ -1,11 +1,19 @@
+import {commObject, MainComment} from "./types"
+
 class Drow {
-    constructor (MainComments, ) {
+    MainCommObj: MainComment[];
+    commentPosition: HTMLElement | null;
+    countElementPosition: HTMLElement | null;
+
+    constructor (MainCommObj: MainComment[]) {
         this.MainCommObj = MainCommObj;
+        this.commentPosition = document.querySelector(".comment");
+        this.countElementPosition = document.querySelector(".comment_header_counterElement");
     }
 
     drowComment() {                                                                    // рисуем все кооментарии
-        while (commentPosition?.firstChild) {                                                  // удаляем дочерние элементы 
-            commentPosition.removeChild(commentPosition.firstChild);
+        while (this.commentPosition?.firstChild) {                                                  // удаляем дочерние элементы 
+            this.commentPosition.removeChild(this.commentPosition.firstChild);
         }
         
         for (let i:number = 0; i < this.MainCommObj.length; i++) {
@@ -16,8 +24,8 @@ class Drow {
     
                 let mainCommElem_foto: HTMLImageElement = document.createElement("img");
                     mainCommElem_foto.classList.add("comment_authorFoto");
-                    mainCommElem_foto.src = MainCommObj[i].author_avatar;
-                    mainCommElem_foto.setAttribute("alt", MainCommObj[i].author_avatar);
+                    mainCommElem_foto.src = this.MainCommObj[i].author_avatar;
+                    mainCommElem_foto.setAttribute("alt", this.MainCommObj[i].author_avatar);
                     mainCommElement?.appendChild(mainCommElem_foto);
     
                 let mainCommElem_head: HTMLElement = document.createElement("div");
@@ -25,19 +33,19 @@ class Drow {
     
                     let mainCommElem_head_name: HTMLElement = document.createElement("div");
                         mainCommElem_head_name.classList.add("author_name");
-                        mainCommElem_head_name.textContent = MainCommObj[i].author_name;
+                        mainCommElem_head_name.textContent = this.MainCommObj[i].author_name;
                         mainCommElem_head.appendChild(mainCommElem_head_name);
     
                     let mainCommElem_head_date: HTMLElement = document.createElement("div");
                         mainCommElem_head_date.classList.add("comment_textHead_date");
-                        mainCommElem_head_date.textContent = MainCommObj[i].date_time;
+                        mainCommElem_head_date.textContent = this.MainCommObj[i].date_time;
                         mainCommElem_head.appendChild(mainCommElem_head_date);
                     
                 mainCommElement.appendChild(mainCommElem_head);
     
                 let mainCommElem_text: HTMLElement = document.createElement("p");
                     mainCommElem_text.classList.add("comment_textContent");
-                    mainCommElem_text.textContent = MainCommObj[i].text;
+                    mainCommElem_text.textContent = this.MainCommObj[i].text;
                     mainCommElement.appendChild(mainCommElem_text);
     
                 let mainCommElem_bottom: HTMLElement = document.createElement("div");
@@ -46,11 +54,11 @@ class Drow {
                     let mainCommElem_bottom_answBut: HTMLElement = document.createElement("div");
                         mainCommElem_bottom_answBut.classList.add("comment_bottom_answerButton");
                         mainCommElem_bottom_answBut.setAttribute("data-answBut", String(i));
-                        mainCommElem_bottom_answBut.addEventListener ("click", () => {
-                            MainCommObj[i] = saveAnswer(MainCommObj[i], i);
-                            // console.log(MainComments[i])
-                            localStorage.setItem("comments", JSON.stringify(MainCommObj));
-                        });
+                        // mainCommElem_bottom_answBut.addEventListener ("click", () => {
+                        //     this.MainCommObj[i] = saveAnswer(this.MainCommObj[i], i);
+                        //     // console.log(MainComments[i])
+                        //     localStorage.setItem("comments", JSON.stringify(this.MainCommObj));
+                        // });
     
                         let mainCommElem_bottom_answButImg: HTMLImageElement = document.createElement("img");
                             mainCommElem_bottom_answButImg.src = "./SVG/BackArrow.svg";
@@ -71,7 +79,7 @@ class Drow {
                         let mainCommElem_bottom_favButTxt: HTMLElement = document.createElement("div");
                             mainCommElem_bottom_favButTxt.setAttribute("Data-favButTxt", String(i));
                         
-                        if (MainCommObj[i].isFavorite) {
+                        if (this.MainCommObj[i].isFavorite) {
                             mainCommElem_bottom_favButImg.src = "./SVG/HeartFullIcon.svg";
                             mainCommElem_bottom_favButImg.setAttribute("alt", "./SVG/HeartFullIcon.svg");
                             mainCommElem_bottom_favButTxt.textContent = "В избранном";
@@ -87,14 +95,14 @@ class Drow {
                     mainCommElem_bottom_favBut.addEventListener ("click", () => {
                         let mainCommElem_bottom_favButImgPosit = document.querySelector('[Data-favButImg="'+ i +'"]') as HTMLImageElement;
                         let mainCommElem_bottom_favButTxtPosit = document.querySelector('[Data-favButTxt="'+ i +'"]') as HTMLElement;
-                        if (MainCommObj[i].isFavorite) {
-                            MainCommObj[i].isFavorite = false;
+                        if (this.MainCommObj[i].isFavorite) {
+                            this.MainCommObj[i].isFavorite = false;
                             mainCommElem_bottom_favButImgPosit.src = "./SVG/HeartEmptyIcon.svg";
                             mainCommElem_bottom_favButImgPosit.setAttribute("alt", "./SVG/HeartEmptyIcon.svg");
                             mainCommElem_bottom_favButTxtPosit.textContent = "В избранное";
     
                         } else {
-                            MainCommObj[i].isFavorite = true;
+                            this.MainCommObj[i].isFavorite = true;
                             mainCommElem_bottom_favButImgPosit.src = "./SVG/HeartFullIcon.svg";
                             mainCommElem_bottom_favButImgPosit.setAttribute("alt", "./SVG/HeartFullIcon.svg");
                             mainCommElem_bottom_favButTxtPosit.textContent = "В избранном";
@@ -109,19 +117,19 @@ class Drow {
                         mainCommElem_bottom_rtnButNgt.setAttribute("Data-rtnButNgt", String(i));
                         mainCommElem_bottom_rtnButNgt.textContent = "-";
                         mainCommElem_bottom_rtnBut.appendChild(mainCommElem_bottom_rtnButNgt);
-                        mainCommElem_bottom_rtnButNgt.addEventListener ("click", () => {
-                            raitingChangeFunc(false, i)
-                        });
+                        // mainCommElem_bottom_rtnButNgt.addEventListener ("click", () => {
+                        //     raitingChangeFunc(false, i)
+                        // });
     
                         let mainCommElem_bottom_rtnButVle: HTMLElement = document.createElement("div");
                         mainCommElem_bottom_rtnButVle.classList.add("comment_bottom_reitingValue");
                         mainCommElem_bottom_rtnButVle.setAttribute("Data-rtnButVle", String(i));
-                        mainCommElem_bottom_rtnButVle.textContent = `${MainComments[i].raiting}`;
+                        mainCommElem_bottom_rtnButVle.textContent = `${this.MainCommObj[i].raiting}`;
                         mainCommElem_bottom_rtnBut.appendChild(mainCommElem_bottom_rtnButVle);
     
-                        if (MainCommObj[i].raiting < 0) {
+                        if (this.MainCommObj[i].raiting < 0) {
                             mainCommElem_bottom_rtnButVle.style.color = "#FF0000";
-                        } else if (MainCommObj[i].raiting = 0) {
+                        } else if (this.MainCommObj[i].raiting = 0) {
                             mainCommElem_bottom_rtnButVle.style.color = "#D9D9D9";
                         } else {
                             mainCommElem_bottom_rtnButVle.style.color = "#8AC540";
@@ -132,16 +140,16 @@ class Drow {
                         mainCommElem_bottom_rtnButPst.textContent = "+";
                         mainCommElem_bottom_rtnButPst.setAttribute("Data-rtnButPst", String(i));
                         mainCommElem_bottom_rtnBut.appendChild(mainCommElem_bottom_rtnButPst);
-                        mainCommElem_bottom_rtnButPst.addEventListener ("click", () => {
-                            raitingChangeFunc(true, i)
-                        });
+                        // mainCommElem_bottom_rtnButPst.addEventListener ("click", () => {
+                        //     raitingChangeFunc(true, i)
+                        // });
                         
                 mainCommElem_bottom.appendChild(mainCommElem_bottom_rtnBut);
     
             mainCommElement.appendChild(mainCommElem_bottom);
-            commentPosition?.insertBefore(mainCommElement, commentPosition.firstChild);
+            this.commentPosition?.insertBefore(mainCommElement, this.commentPosition.firstChild);
     
-            console.log("MainComments[i].answers", MainCommObj[i].answers)
+            console.log("MainComments[i].answers", this.MainCommObj[i].answers)
     
             // if (MainCommObj[i].answers?.length !== undefined) {
             //     console.log("колич ответов - ", MainCommObj[i].answers?.length)
@@ -149,8 +157,8 @@ class Drow {
             //     console.log("в сообщении "+i+" нет ответов")
             // }
             
-            if (countElementPosition) {
-                countElementPosition.textContent = `(${MainCommObj.length})`;
+            if (this.countElementPosition) {
+                this.countElementPosition.textContent = `(${this.MainCommObj.length})`;
             }
         }
     }
