@@ -4,7 +4,6 @@
 interface commObject {
     author_avatar: string,
     author_name: string,
-    headAuthor_name: string,
     date_time: string,
     text: string,
     isFavorite: boolean,
@@ -283,7 +282,7 @@ class Drow {
 
                                         let CommElem_head_AuthName: HTMLElement = document.createElement("div");
                                             CommElem_head_AuthName.classList.add("comment_answer_commentAuthor");
-                                            CommElem_head_AuthName.textContent = AnsReit?.headAuthor_name as string;
+                                            CommElem_head_AuthName.textContent = SortCommObj[i].author_name as string;
                                             CommElem_head_wrap.appendChild(CommElem_head_AuthName);
                                 
                                     CommElem_head.appendChild(CommElem_head_wrap);
@@ -488,13 +487,13 @@ const inputButton: HTMLButtonElement | null = document.querySelector(".comment_i
 inputButton?.addEventListener("click", (event) => {                                             // обрабатываем нажатие кнопки ОТПРАВИТЬ
     if (inputFieldPosition?.value !== "") {
         if (inputFieldPosition) {
-            let inputComment: commObject = {author_avatar: "", author_name: "", headAuthor_name: "", date_time: "", text: "", isFavorite: false, rating: 0, 
+            let inputComment: commObject = {author_avatar: "", author_name: "", date_time: "", text: "", isFavorite: false, rating: 0, 
                                             ratingBorder: 0, valueOfRating: 0, valueOfAnswers: 0};
             if (usersGroup[0].avatar && usersGroup[0].firstName) {
                 let currDate: Date = new Date();
                 let currDateString: string = `${("0"+currDate.getDate()).slice(-2)}.${("0"+(currDate.getMonth()+1)).slice(-2)} ${("0"+currDate.getHours()).slice(-2)}:${("0"+currDate.getMinutes()).slice(-2)}`;
                 
-                inputComment = {author_avatar: usersGroup[0].avatar, author_name: usersGroup[0].firstName, headAuthor_name: "",
+                inputComment = {author_avatar: usersGroup[0].avatar, author_name: usersGroup[0].firstName,
                                 date_time: currDateString, text: inputFieldPosition.value, isFavorite: false, 
                                 rating: 0, ratingBorder: 0, valueOfRating:0, valueOfAnswers: 0};
                 
@@ -586,13 +585,13 @@ function saveAnswer(obj:MainComment[], index: number) {
 
         inputAnswerFieldButtonPosition?.addEventListener("click", (event) => {                                             // обрабатываем нажатие кнопки ОТПРАВИТЬ ОТВЕТ
             if (inputAnswerFieldElement.value !== "") {
-                let inputComment: commObject = {author_avatar: "", author_name: "", headAuthor_name: "", date_time: "", text: "", isFavorite: false, rating: 0, 
+                let inputComment: commObject = {author_avatar: "", author_name: "", date_time: "", text: "", isFavorite: false, rating: 0, 
                                                 ratingBorder: 0, valueOfRating: 0, valueOfAnswers: 0};
                 if (usersGroup[0].avatar && usersGroup[0].firstName) {
                     let currDate: Date = new Date();
                     let currDateString: string = `${("0"+currDate.getDate()).slice(-2)}.${("0"+(currDate.getMonth()+1)).slice(-2)} ${("0"+currDate.getHours()).slice(-2)}:${("0"+currDate.getMinutes()).slice(-2)}`;
                     
-                    inputComment = {author_avatar: usersGroup[0].avatar, author_name: usersGroup[0].firstName, headAuthor_name: MainComments[index].author_name, 
+                    inputComment = {author_avatar: usersGroup[0].avatar, author_name: usersGroup[0].firstName, 
                                     date_time: currDateString, text: inputAnswerFieldElement.value, isFavorite: false, 
                                     rating: 0, ratingBorder: 0, valueOfRating: 0, valueOfAnswers: 0};
                     }
